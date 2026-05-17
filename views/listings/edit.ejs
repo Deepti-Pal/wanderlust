@@ -1,0 +1,125 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container py-5" style="max-width: 680px;">
+  <div class="form-card">
+    <div class="form-card-header">
+      <h3><i class="fa-solid fa-pen-to-square me-2"></i>Edit your listing</h3>
+      <p class="text-muted">Update the details of your property.</p>
+    </div>
+
+    <form
+      action="/listings/<%= listing._id %>?_method=PUT"
+      method="POST"
+      enctype="multipart/form-data"
+      novalidate
+      class="needs-validation"
+    >
+      <div class="mb-3">
+        <label for="title" class="form-label fw-semibold">Title</label>
+        <input
+          type="text"
+          name="listing[title]"
+          id="title"
+          class="form-control"
+          value="<%= listing.title %>"
+          required
+        />
+        <div class="invalid-feedback">Please add a title.</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="description" class="form-label fw-semibold">Description</label>
+        <textarea
+          name="listing[description]"
+          id="description"
+          class="form-control"
+          rows="4"
+          required
+        ><%= listing.description %></textarea>
+        <div class="invalid-feedback">Please add a description.</div>
+      </div>
+
+      <!-- Current Image Preview -->
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Current Photo</label><br />
+        <img
+          src="<%= originalImageUrl %>"
+          alt="current listing image"
+          class="img-thumbnail current-img-preview"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="image" class="form-label fw-semibold">Update Photo</label>
+        <input
+          type="file"
+          name="listing[image]"
+          id="image"
+          class="form-control"
+          accept="image/*"
+        />
+        <div class="form-text">Leave blank to keep current photo.</div>
+      </div>
+
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label for="price" class="form-label fw-semibold">Price per night (₹)</label>
+          <input
+            type="number"
+            name="listing[price]"
+            id="price"
+            class="form-control"
+            value="<%= listing.price %>"
+            min="0"
+            required
+          />
+        </div>
+        <div class="col-md-6">
+          <label for="category" class="form-label fw-semibold">Category</label>
+          <select name="listing[category]" id="category" class="form-select">
+            <% const categories = ["Trending","Rooms","Iconic cities","Mountains","Castles","Amazing pools","Camping","Farms","Arctic","Boats","Beach"]; %>
+            <% for (let cat of categories) { %>
+            <option value="<%= cat %>" <%= listing.category === cat ? 'selected' : '' %>>
+              <%= cat %>
+            </option>
+            <% } %>
+          </select>
+        </div>
+      </div>
+
+      <div class="row g-3 mb-4">
+        <div class="col-md-6">
+          <label for="location" class="form-label fw-semibold">Location / City</label>
+          <input
+            type="text"
+            name="listing[location]"
+            id="location"
+            class="form-control"
+            value="<%= listing.location %>"
+            required
+          />
+        </div>
+        <div class="col-md-6">
+          <label for="country" class="form-label fw-semibold">Country</label>
+          <input
+            type="text"
+            name="listing[country]"
+            id="country"
+            class="form-control"
+            value="<%= listing.country %>"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="d-flex gap-3">
+        <button type="submit" class="btn btn-dark flex-fill btn-lg">
+          <i class="fa-solid fa-floppy-disk me-2"></i>Save Changes
+        </button>
+        <a href="/listings/<%= listing._id %>" class="btn btn-outline-secondary flex-fill btn-lg">
+          Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+</div>

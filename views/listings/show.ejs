@@ -1,0 +1,228 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container py-4" style="max-width: 900px;">
+  <nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/listings">All Listings</a></li>
+      <li class="breadcrumb-item active"><%= listing.title %></li>
+    </ol>
+  </nav>
+
+  <h2 class="show-title mb-1"><%= listing.title %></h2>
+  <p class="text-muted mb-3">
+    <i class="fa-solid fa-location-dot me-1"></i>
+    <%= listing.location %>, <%= listing.country %>
+    &nbsp;·&nbsp;
+    <span class="badge bg-secondary"><%= listing.category %></span>
+  </p>
+
+  <div class="show-img-wrap mb-4">
+    <img src="<%= listing.image.url %>" alt="<%= listing.title %>" class="show-img"/>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-7">
+      <div class="host-card mb-4">
+        <div class="d-flex align-items-center gap-3">
+          <i class="fa-solid fa-circle-user fa-3x text-secondary"></i>
+          <div>
+            <h5 class="mb-0">Hosted by <strong><%= listing.owner ? listing.owner.username : "Wanderlust Host" %></strong></h5>
+            <small class="text-muted">Superhost · 3 years hosting</small>
+          </div>
+        </div>
+      </div>
+
+      <hr/>
+
+      <div class="mb-4">
+        <h5 class="section-heading">About this place</h5>
+        <p class="listing-description"><%= listing.description %></p>
+      </div>
+
+      <hr/>
+
+      <div class="mb-4">
+        <h5 class="section-heading">What this place offers</h5>
+        <div class="row g-2">
+          <% const amenities = [["wifi","Wifi"],["tv","TV"],["kitchen","Kitchen"],["car","Free parking"],["snowflake","Air conditioning"],["dumbbell","Gym access"]]; %>
+          <% for (let [icon, label] of amenities) { %>
+          <div class="col-6">
+            <div class="amenity-item">
+              <i class="fa-solid fa-<%= icon %>"></i>
+              <span><%= label %></span>
+            </div>
+          </div>
+          <% } %>
+        </div>
+      </div>
+
+      <hr/>
+
+      <div class="mb-4">
+        <h5 class="section-heading">
+          <i class="fa-solid fa-star me-2 text-warning"></i>Reviews
+          <span class="badge bg-light text-dark ms-2"><%= listing.reviews.length %></span>
+        </h5>
+
+        <% if (listing.reviews.length === 0) { %>
+        <p class="text-muted">No reviews yet. Be the first to review!</p>
+        <% } %>
+
+        <div class="reviews-list">
+          <% for (let review of listing.reviews) { %>
+          <div class="review-card">
+            <div class="review-header">
+              <i class="fa-solid fa-circle-user fa-2x text-secondary"></i>
+              <div>
+                <strong><%= review.author ? review.author.username : "User" %></strong>
+                <div class="review-stars">
+                  <% for (let i = 1; i <= 5; i++) { %>
+                  <i class="fa-star <%= i <= review.rating ? 'fa-solid text-warning' : 'fa-regular text-muted' %>"></i>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+            <p class="review-comment"><%= review.comment %></p>
+            <% if (currUser && review.author && currUser._id.equals(review.author._id)) { %>
+            <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST" class="mt-2">
+              <button type="submit" class="btn btn-sm btn-outline-danger">
+                <i class="fa-solid fa-trash me-1"></i>Delete
+              </button>
+            </form>
+            <% } %>
+          </div>
+          <% } %>
+        </div>
+
+        <% if (currUser) { %>
+        <div class="review-form-wrap mt-4">
+          <h6 class="mb-3">Leave a Review</h6>
+          <form action="/listings/<%= listing._id %>/reviews" method="POST">
+            <div class="mb-3">
+              <label class="form-label">Rating</label>
+              <div class="star-rating-input">
+                <% for (let i = 5; i >= 1; i--) { %>
+                <input type="radio" name="review[rating]" id="review-star<%= i %>" value="<%= i %>" <%= i === 5 ? 'checked' : '' %> required/>
+                <label for="review-star<%= i %>"><i class="fa-star fa-solid"></i></label>
+                <% } %>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="comment" class="form-label">Your Experience</label>
+              <textarea name="review[comment]" id="comment" class="form-control" rows="3" placeholder="Share your thoughts..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-dark">
+              <i class="fa-solid fa-paper-plane me-2"></i>Submit Review
+            </button>
+          </form>
+        </div>
+        <% } else { %>
+        <div class="alert alert-light mt-3">
+          <a href="/login" class="text-dark fw-semibold">Log in</a> to leave a review.
+        </div>
+        <% } %>
+      </div>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="booking-card sticky-top">
+        <div class="booking-price">
+          <span class="price-amount">₹<%= listing.price.toLocaleString("en-IN") %></span>
+          <span class="price-night"> / night</span>
+        </div>
+        <hr/>
+        <div class="booking-dates">
+          <div class="date-box">
+            <label>CHECK-IN</label>
+            <input type="date" class="form-control"/>
+          </div>
+          <div class="date-box">
+            <label>CHECKOUT</label>
+            <input type="date" class="form-control"/>
+          </div>
+        </div>
+        <div class="booking-guests mt-3">
+          <label>GUESTS</label>
+          <select class="form-select">
+            <option>1 guest</option>
+            <option>2 guests</option>
+            <option>3 guests</option>
+            <option>4+ guests</option>
+          </select>
+        </div>
+        <button class="btn btn-danger w-100 mt-3 reserve-btn">Reserve</button>
+        <p class="text-center text-muted small mt-2">You won't be charged yet</p>
+
+        <% if (currUser && listing.owner && listing.owner._id.equals(currUser._id)) { %>
+        <hr/>
+        <div class="d-flex gap-2">
+          <a href="/listings/<%= listing._id %>/edit" class="btn btn-outline-dark flex-fill">
+            <i class="fa-solid fa-pen me-1"></i>Edit
+          </a>
+          <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST" class="flex-fill">
+            <button type="submit" class="btn btn-outline-danger w-100">
+              <i class="fa-solid fa-trash me-1"></i>Delete
+            </button>
+          </form>
+        </div>
+        <% } %>
+      </div>
+    </div>
+
+    <div class="col-12 mt-4">
+      <h5 class="section-heading mb-3">
+        <i class="fa-solid fa-map-location-dot me-2"></i>Where you'll be
+      </h5>
+      <div id="map"
+        style="height: 400px; border-radius: 12px;"
+        data-coords="<%= listing.geometry ? JSON.stringify(listing.geometry.coordinates) : '' %>"
+        data-token="<%= mapToken %>"
+        data-title="<%= listing.title %>"
+        data-location="<%= listing.location %>, <%= listing.country %>">
+      </div>
+    </div>
+
+  </div>
+</div>
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.0.0/mapbox-gl.css" rel="stylesheet"/>
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.0.0/mapbox-gl.js"></script>
+<script>
+  window.addEventListener("load", function() {
+    var mapDiv = document.getElementById("map");
+    if (!mapDiv) return;
+
+    var rawCoords = mapDiv.getAttribute("data-coords");
+    var rawToken = mapDiv.getAttribute("data-token");
+
+    if (!rawCoords || !rawToken) {
+      mapDiv.innerHTML = "<p class='text-muted text-center pt-5'>Map not available.</p>";
+      return;
+    }
+
+    try {
+      var coordinates = JSON.parse(rawCoords);
+      mapboxgl.accessToken = rawToken;
+
+      var map = new mapboxgl.Map({
+        container: "map",
+        style: "mapbox://styles/mapbox/streets-v12",
+        center: coordinates,
+        zoom: 9,
+      });
+
+      new mapboxgl.Marker({ color: "#FF385C" })
+        .setLngLat(coordinates)
+        .setPopup(
+          new mapboxgl.Popup({ offset: 25 }).setHTML(
+            mapDiv.getAttribute("data-title") + "<br>" + mapDiv.getAttribute("data-location")
+          )
+        )
+        .addTo(map);
+
+      map.addControl(new mapboxgl.NavigationControl());
+
+    } catch(e) {
+      mapDiv.innerHTML = "<p class='text-muted text-center pt-5'>Map not available.</p>";
+    }
+  });
+</script>

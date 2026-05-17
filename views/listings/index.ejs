@@ -1,0 +1,59 @@
+<% layout("/layouts/boilerplate") %>
+<div class="category-bar">
+  <div class="container-fluid px-4">
+    <div class="category-scroll">
+      <% const categories = ["Trending","Rooms","Iconic cities","Mountains","Castles","Amazing pools","Camping","Farms","Arctic","Boats","Beach"]; %>
+      <% const icons = { "Trending":"fire","Rooms":"door-open","Iconic cities":"city","Mountains":"mountain","Castles":"chess-rook","Amazing pools":"water-ladder","Camping":"campground","Farms":"tractor","Arctic":"snowflake","Boats":"sailboat","Beach":"umbrella-beach" }; %>
+      <% for (let cat of categories) { %>
+      <a href="/listings?category=<%= cat %>" class="category-pill <%= category === cat ? 'active' : '' %>">
+        <i class="fa-solid fa-<%= icons[cat] %>"></i>
+        <span><%= cat %></span>
+      </a>
+      <% } %>
+    </div>
+  </div>
+</div>
+<div class="container-fluid px-4 py-4">
+  <% if (!allListings || allListings.length === 0) { %>
+  <div class="empty-state text-center py-5">
+    <i class="fa-solid fa-house-circle-xmark fa-4x text-muted mb-3"></i>
+    <h4>No listings found</h4>
+    <p class="text-muted">Try a different search or category.</p>
+    <a href="/listings" class="btn btn-dark mt-2">Clear Filters</a>
+  </div>
+  <% } else { %>
+  <div class="listings-grid">
+    <% for (let listing of allListings) { %>
+    <div class="listing-card-wrap">
+      <a href="/listings/<%= listing._id.toString() %>" class="listing-card-link">
+        <div class="listing-card">
+          <div class="listing-img-wrap">
+            <img src="<%= listing.image.url %>" alt="<%= listing.title %>" class="listing-img"/>
+            <button class="wishlist-btn" onclick="event.preventDefault(); this.classList.toggle('active')">
+              <i class="fa-heart fa-lg"></i>
+            </button>
+          </div>
+          <div class="listing-info">
+            <div class="listing-title-row">
+              <h6 class="listing-title"><%= listing.title %></h6>
+              <div class="listing-rating">
+                <i class="fa-solid fa-star"></i>
+                <span>4.<%= Math.floor(Math.random() * 9) + 1 %></span>
+              </div>
+            </div>
+            <p class="listing-location">
+              <i class="fa-solid fa-location-dot me-1"></i>
+              <%= listing.location %>, <%= listing.country %>
+            </p>
+            <p class="listing-price">
+              <strong>₹<%= listing.price.toLocaleString("en-IN") %></strong>
+              <span class="text-muted"> / night</span>
+            </p>
+          </div>
+        </div>
+      </a>
+    </div>
+    <% } %>
+  </div>
+  <% } %>
+</div>

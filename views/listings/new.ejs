@@ -1,0 +1,119 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container py-5" style="max-width: 680px;">
+  <div class="form-card">
+    <div class="form-card-header">
+      <h3><i class="fa-solid fa-house-chimney-user me-2"></i>List your place</h3>
+      <p class="text-muted">Share your space with travelers from around the world.</p>
+    </div>
+
+    <form
+      action="/listings"
+      method="POST"
+      enctype="multipart/form-data"
+      novalidate
+      class="needs-validation"
+    >
+      <div class="mb-3">
+        <label for="title" class="form-label fw-semibold">Title</label>
+        <input
+          type="text"
+          name="listing[title]"
+          id="title"
+          class="form-control"
+          placeholder="e.g. Cozy Mountain Cabin with Lake View"
+          required
+        />
+        <div class="invalid-feedback">Please add a title.</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="description" class="form-label fw-semibold">Description</label>
+        <textarea
+          name="listing[description]"
+          id="description"
+          class="form-control"
+          rows="4"
+          placeholder="Describe your place — what makes it special?"
+          required
+        ></textarea>
+        <div class="invalid-feedback">Please add a description.</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="image" class="form-label fw-semibold">Photo</label>
+        <input
+          type="file"
+          name="listing[image]"
+          id="image"
+          class="form-control"
+          accept="image/*"
+        />
+        <div class="form-text">Upload a great photo to attract guests.</div>
+      </div>
+
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label for="price" class="form-label fw-semibold">Price per night (₹)</label>
+          <input
+            type="number"
+            name="listing[price]"
+            id="price"
+            class="form-control"
+            placeholder="2000"
+            min="0"
+            required
+          />
+          <div class="invalid-feedback">Please add a price.</div>
+        </div>
+        <div class="col-md-6">
+          <label for="category" class="form-label fw-semibold">Category</label>
+          <select name="listing[category]" id="category" class="form-select">
+            <option value="Trending">Trending</option>
+            <option value="Rooms">Rooms</option>
+            <option value="Iconic cities">Iconic cities</option>
+            <option value="Mountains">Mountains</option>
+            <option value="Castles">Castles</option>
+            <option value="Amazing pools">Amazing pools</option>
+            <option value="Camping">Camping</option>
+            <option value="Farms">Farms</option>
+            <option value="Arctic">Arctic</option>
+            <option value="Boats">Boats</option>
+            <option value="Beach">Beach</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row g-3 mb-4">
+        <div class="col-md-6">
+          <label for="location" class="form-label fw-semibold">Location / City</label>
+          <input
+            type="text"
+            name="listing[location]"
+            id="location"
+            class="form-control"
+            placeholder="e.g. Manali"
+            required
+          />
+          <div class="invalid-feedback">Please add a location.</div>
+        </div>
+        <div class="col-md-6">
+          <label for="country" class="form-label fw-semibold">Country</label>
+          <input
+            type="text"
+            name="listing[country]"
+            id="country"
+            class="form-control"
+            placeholder="e.g. India"
+            required
+          />
+          <div class="invalid-feedback">Please add a country.</div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-dark w-100 btn-lg">
+        <i class="fa-solid fa-cloud-arrow-up me-2"></i>Create Listing
+      </button>
+    </form>
+  </div>
+</div>

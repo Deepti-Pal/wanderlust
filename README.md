@@ -42,41 +42,6 @@ A full-stack web application inspired by Airbnb, built with Node.js, Express.js,
 
 ---
 
-## Project Structure
-
-wanderlust/
-├── controllers/
-│   ├── listings.js
-│   ├── reviews.js
-│   └── users.js
-├── models/
-│   ├── listing.js
-│   ├── review.js
-│   └── user.js
-├── routes/
-│   ├── listing.js
-│   ├── review.js
-│   └── user.js
-├── views/
-│   ├── layouts/
-│   ├── listings/
-│   ├── partials/
-│   └── users/
-├── public/
-│   └── css/
-├── utils/
-│   ├── cloudConfig.js
-│   ├── ExpressError.js
-│   ├── mapConfig.js
-│   ├── schema.js
-│   └── wrapAsync.js
-├── init/
-│   └── index.js
-├── middleware.js
-├── app.js
-└── .env
-
----
 
 ## Installation and Setup
 
@@ -153,14 +118,6 @@ This project follows the MVC (Model-View-Controller) design pattern:
 
 ---
 
-## Developer
 
-Deepti Pal
 
-GitHub: [https://github.com/Deepti-Pal](https://github.com/Deepti-Pal)
 
----
-
-## License
-
-This project is built for educational purposes only.
